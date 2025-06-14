@@ -1,1 +1,4 @@
-declare module '@formkit/themes/dist/genesis.css';
+declare module "@formkit/themes/genesis" {
+  const genesisTheme: string;
+  export default genesisTheme;
+}

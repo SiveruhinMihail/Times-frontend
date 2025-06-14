@@ -1,8 +1,14 @@
+import './assets/main.css'
+
 import { createApp } from 'vue'
 import App from './App.vue'
-import { plugin, defaultConfig } from '@formkit/vue'
-import '@formkit/themes/dist/genesis.css'
+
+import router from './router'
+
+import { plugin as Formkit, defaultConfig } from '@formkit/vue'
+import config from '../formkit.config.ts'
+import '@formkit/themes/genesis'
 
 const app = createApp(App)
-app.use(plugin, defaultConfig)
+app.use(router).use(Formkit, defaultConfig(config))
 app.mount('#app')
