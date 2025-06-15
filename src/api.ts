@@ -1,7 +1,16 @@
 import axios from 'axios'
+import type { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+interface ApiError {
+  detail: string
+}
+
+interface RefreshResponse {
+  access: string
+}
+
+const api: AxiosInstance = axios.create({
+  baseURL: import.meta.env.VITE_API_URL as string,
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
@@ -9,51 +18,61 @@ const api = axios.create({
 })
 
 api.interceptors.response.use(
-  (response) => {
-    return response.data
-  },
-  async (error) => {
-    const originalRequest = error.config
+  (response: AxiosResponse) => response.data,
+  async (error: AxiosError<ApiError>) => {
+    if (!error.config) return Promise.reject(error)
 
-    if (error.response.status === 401 && !originalRequest._retry) {
-      if (
-        error.response.data.detail === 'Токен недействителен или просрочен' ||
-        error.response.data.detail === 'Token is invalid or expired'
-      ) {
+    const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      const errorMessage = error.response.data?.detail
+      const isTokenInvalid = [
+        'Токен недействителен или просрочен',
+        'Token is invalid or expired',
+      ].includes(errorMessage || '')
+
+      if (isTokenInvalid) {
         localStorage.clear()
         window.location.href = '/login'
-      } else {
-        originalRequest._retry = true
+        return Promise.reject(error)
+      }
 
-        let refresh = localStorage.getItem('refresh_token')
+      originalRequest._retry = true
+      const refreshToken = localStorage.getItem('refresh_token')
 
-        try {
-          if (!(refresh === null)) {
-            const response = await api.get('auth/refresh', { headers: { 'jwt-refresh': refresh } })
-            const newAccessToken = response.data.access
+      if (!refreshToken) {
+        localStorage.clear()
+        window.location.href = '/login'
+        return Promise.reject(error)
+      }
 
-            localStorage.setItem('token', newAccessToken)
-            originalRequest.headers['authorization'] = `Bearer ${newAccessToken}`
+      try {
+        const response = await api.get<RefreshResponse>('auth/refresh', {
+          headers: { 'jwt-refresh': refreshToken },
+        })
 
-            return api(originalRequest)
-          }
-          return 1
-        } catch (refreshError) {}
+        localStorage.setItem('token', response.data.access)
+        originalRequest.headers['authorization'] = `Bearer ${response.data.access}`
+
+        return api(originalRequest)
+      } catch (refreshError) {
+        localStorage.clear()
+        window.location.href = '/login'
+        return Promise.reject(refreshError)
       }
     }
+    return Promise.reject(error)
   },
 )
 
 api.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('token')
-
-    if (token) {
+    if (token && config.headers) {
       config.headers['authorization'] = `Bearer ${token}`
     }
     return config
   },
-  (error) => Promise.reject(error),
+  (error: AxiosError) => Promise.reject(error),
 )
-
 export default api
