@@ -1,15 +1,12 @@
 import axios from 'axios'
 import type { AxiosInstance, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios'
+import { useAuthStore } from '@/stores/auth'
 
 interface ApiError {
   detail: string
 }
 
-interface RefreshResponse {
-  access: string
-}
-
-const api_photo: AxiosInstance = axios.create({
+const api: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_FILES_API_URL as string,
   headers: {
     'Access-Control-Allow-Origin': '*',
@@ -17,13 +14,23 @@ const api_photo: AxiosInstance = axios.create({
   },
 })
 
-api_photo.interceptors.response.use(
+api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  const authStore = useAuthStore()
+  if (authStore.accessToken && config.headers) {
+    config.headers['authorization'] = `Bearer ${authStore.accessToken}`
+  }
+  return config
+})
+
+api.interceptors.response.use(
   (response: AxiosResponse) => response.data,
   async (error: AxiosError<ApiError>) => {
     if (!error.config) return Promise.reject(error)
 
     const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean }
+    const authStore = useAuthStore()
 
+    // Обработка 401 ошибки
     if (error.response?.status === 401 && !originalRequest._retry) {
       const errorMessage = error.response.data?.detail
       const isTokenInvalid = [
@@ -32,47 +39,26 @@ api_photo.interceptors.response.use(
       ].includes(errorMessage || '')
 
       if (isTokenInvalid) {
-        localStorage.clear()
+        authStore.clearTokens()
         window.location.href = '/login'
         return Promise.reject(error)
       }
 
       originalRequest._retry = true
-      const refreshToken = localStorage.getItem('refresh_token')
-
-      if (!refreshToken) {
-        localStorage.clear()
-        window.location.href = '/login'
-        return Promise.reject(error)
-      }
 
       try {
-        const response = await api_photo.get<RefreshResponse>('auth/refresh', {
-          headers: { 'jwt-refresh': refreshToken },
-        })
-
-        localStorage.setItem('token', response.data.access)
-        originalRequest.headers['authorization'] = `Bearer ${response.data.access}`
-
-        return api_photo(originalRequest)
+        const newAccessToken = await authStore.refreshAccessToken()
+        originalRequest.headers['authorization'] = `Bearer ${newAccessToken}`
+        return api(originalRequest)
       } catch (refreshError) {
-        localStorage.clear()
+        authStore.clearTokens()
         window.location.href = '/login'
         return Promise.reject(refreshError)
       }
     }
+
     return Promise.reject(error)
   },
 )
 
-api_photo.interceptors.request.use(
-  (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('token')
-    if (token && config.headers) {
-      config.headers['authorization'] = `Bearer ${token}`
-    }
-    return config
-  },
-  (error: AxiosError) => Promise.reject(error),
-)
-export default api_photo
+export default api

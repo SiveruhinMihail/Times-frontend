@@ -5,7 +5,9 @@
     "strict": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"],
+      "@/api": ["src/api.ts"],
+      "@/stores/*": ["src/stores/*"]
     },
     "module": "ESNext",
     "moduleResolution": "NodeNext"
