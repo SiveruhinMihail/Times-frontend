@@ -1,11 +1,12 @@
-const { color } = require("@formkit/icons");
-
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx,vue}",
-    "./formkit.theme.ts ",
+    "./components/**/*.{js,vue,ts}",
+    "./layouts/**/*.vue",
+    "./pages/**/*.vue",
+    "./plugins/**/*.{js,ts}",
+    "./app.vue",
+    "./formkit.config.ts",
   ],
   theme: {
     extend: {},
