@@ -14,7 +14,7 @@ export const useApi = () => {
         } as CustomFetchHeaders;
       }
     },
-    async onResponseError({ response }) {
+    async onResponseError({ request, response, options }) {
       if (response.status === 401) {
         const errorMessage = response._data?.data?.detail;
         const isTokenInvalid = (message: string) =>
@@ -23,16 +23,18 @@ export const useApi = () => {
         if (isTokenInvalid(errorMessage)) {
           try {
             const newAccessToken = await authStore.refreshAccessToken();
+            options.headers = {
+              ...options.headers,
+              Authorization: `Bearer ${newAccessToken}`,
+            } as CustomFetchHeaders;
 
-            if (response._data?.data.config) {
-              const { url, method, params } = response._data.data.config;
-              const API = config.public.apiBaseUrl.slice(0, -5);
-              return await $fetch(API + url, {
-                method,
-                params,
-                headers: { Authorization: `Bearer ${newAccessToken}` },
-              });
-            }
+            return $fetch(request.toString(), {
+              options,
+              baseURL: undefined,
+              headers: {
+                Authorization: `Bearer ${newAccessToken}`,
+              },
+            });
           } catch (error) {
             authStore.clearTokens();
             navigateTo("/auth/login");
@@ -40,7 +42,6 @@ export const useApi = () => {
           }
         } else {
           authStore.clearTokens();
-
           navigateTo("/auth/login");
         }
       }

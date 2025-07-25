@@ -7,16 +7,28 @@ interface AuthState {
 
 export const useAuthStore = defineStore("auth", {
   state: (): AuthState => ({
-    accessToken: process.client ? localStorage.getItem("token") : null,
-    refreshToken: process.client ? localStorage.getItem("refresh_token") : null,
+    accessToken: null,
+    refreshToken: null,
   }),
   actions: {
+    initTokens() {
+      if (import.meta.client) {
+        this.accessToken = localStorage.getItem("token") || null;
+        this.refreshToken = localStorage.getItem("refresh_token") || null;
+      }
+    },
     setTokens(access: string, refresh: string) {
       this.accessToken = access;
       this.refreshToken = refresh;
       if (process.client) {
         localStorage.setItem("token", access);
         localStorage.setItem("refresh_token", refresh);
+      }
+    },
+    setToken(access: string) {
+      this.accessToken = access;
+      if (process.client) {
+        localStorage.setItem("token", access);
       }
     },
     clearTokens() {
@@ -45,8 +57,7 @@ export const useAuthStore = defineStore("auth", {
         );
         const access = response.data.access_token;
 
-        this.accessToken = access;
-        localStorage.setItem("token", access);
+        this.setToken(access);
 
         return access;
       } catch (error) {

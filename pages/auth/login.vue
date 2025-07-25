@@ -2,6 +2,7 @@
 const submitted = ref(false);
 const formErrors = ref({});
 const config = useRuntimeConfig();
+const authStore = useAuthStore();
 
 const submitHandler = async (data) => {
   try {
@@ -14,8 +15,10 @@ const submitHandler = async (data) => {
       formErrors.value = response.error;
     } else {
       console.log(response);
-      localStorage.setItem("token", response.data.accessToken);
-      localStorage.setItem("refresh_token", response.data.refreshToken);
+      authStore.setTokens(
+        response.data.accessToken,
+        response.data.refreshToken
+      );
       submitted.value = true;
       formErrors.value = {};
       await navigateTo("/");

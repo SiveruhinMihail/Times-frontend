@@ -3,8 +3,8 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ["@pinia/nuxt", "@formkit/nuxt", "@nuxtjs/tailwindcss"],
   devServer: {
-    port: 8000, // Порт для разработки (nuxt dev)
-    host: "127.0.0.1", // Доступ с других устройств в сети
+    port: 8000,
+    host: "127.0.0.1",
   },
   formkit: {
     autoImport: true,
