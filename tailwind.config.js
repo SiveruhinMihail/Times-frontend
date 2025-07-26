@@ -6,7 +6,7 @@ module.exports = {
     "./pages/**/*.vue",
     "./plugins/**/*.{js,ts}",
     "./app.vue",
-    "./formkit.config.ts",
+    "./formkit.theme.ts",
   ],
   theme: {
     extend: {},
