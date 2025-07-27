@@ -3,13 +3,17 @@ const $api = useApi();
 const config = useRuntimeConfig();
 
 const sub = async () => {
-  const response = await $api(
-    config.public.apiBaseUrl + "auth/get_user?email=userrrrr@example.com",
-    {
-      method: "GET",
-    }
-  );
-  console.log(response);
+  try {
+    const response = await $api(
+      config.public.apiBaseUrl + "auth/get_user?email=userrrrr@example.com",
+      {
+        method: "GET",
+      }
+    );
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
 };
 </script>
 

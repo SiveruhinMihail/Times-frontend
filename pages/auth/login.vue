@@ -35,14 +35,15 @@ const submitHandler = async (data) => {
 </script>
 
 <template>
-  <div class="flex flex-col md:flex-row items-center justify-center min-h-screen p-4 bg-gray-50">
-    <div class="w-full md:w-1/2 mb-8 md:mb-0 flex justify-center">
+  <div class="flex items-center justify-center h-screen w-screen min-h-screen">
+    <div class="w-1/2">
       <img
         src="/favicon.ico"
         class="object-contain"
+        style="height: 90vh; width: 90vw"
       />
     </div>
-    <div class="w-full md:w-1/2 md:pl-6 lg:pl-12 max-w-md">
+    <div class="flex-grow" style="margin-left: 6vw">
       <FormKit
         type="form"
         id="registration-example"
@@ -52,10 +53,9 @@ const submitHandler = async (data) => {
         :actions="false"
         incomplete-message="Введите данные"
       >
-        <h1 class="font-bold text-2xl sm:text-3xl md:text-4xl mb-4 md:mb-6">
+        <h1 class="font-bold" style="font-size: 3.2vw; margin-bottom: 2vw">
           Вход
         </h1>
-        
         <FormKit
           type="email"
           name="email"
@@ -63,40 +63,38 @@ const submitHandler = async (data) => {
           placeholder="Misha@example.com"
           help="Введите вашу почту"
           validation="required|email"
-          label-class="text-sm sm:text-base md:text-lg"
-          input-class="text-sm sm:text-base md:text-lg py-2 px-4 w-full border rounded-lg"
-          outer-class="mb-4"
-          help-class="text-xs sm:text-sm"
+          label-class="text-lg"
+          input-class="text-lg py-2 px-4 w-full"
+          :validation-messages="{
+            required: 'Пожалуйста, введите ваш email.',
+            email: 'Пожалуйста, введите корректный email адрес.',
+          }"
         />
-
         <FormKit
           type="password"
           name="password"
           label="Пароль"
-          validation="required|length:6|matches:/[a-zA-Z0-9]/"
+          validation="required|length:6|matches:/[a-zA-Z-Z]/"
+          :validation-messages="{
+            required: 'Пожалуйста, введите пароль.',
+            length: 'Пароль должен содержать не менее 6 символов.',
+            matches: 'Пароль должен содержать хотя бы одну букву или цифру.',
+          }"
           placeholder="Пароль"
-          help="Введите пароль (минимум 6 символов)"
-          label-class="text-sm sm:text-base md:text-lg"
-          input-class="text-sm sm:text-base md:text-lg py-2 px-4 w-full border rounded-lg"
-          outer-class="mb-6"
-          help-class="text-xs sm:text-sm"
+          help="Введите пароль"
+          label-class="text-lg"
+          input-class="text-lg py-2 px-4 w-full"
         />
-
-        <FormKit 
-          type="submit"
-          input-class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg transition-colors text-sm sm:text-base"
-        >
-          Продолжить >
-        </FormKit>
+        <FormKit type="submit">Продолжить ></FormKit>
       </FormKit>
-
-      <div class="mt-4">
-        <NuxtLink 
-          to="/auth/register"
-          class="text-xs sm:text-sm text-blue-600 hover:underline"
-        >
-          Создать аккаунт
-        </NuxtLink>
+      <div v-if="formErrors.general" class="text-red-500">
+        {{ formErrors.general }}
+      </div>
+      <NuxtLink :to="{ path: '/auth/register' }"
+        ><div style="font-size: 1vw">Создать аккаунт</div></NuxtLink
+      >
+      <div v-if="submitted">
+        <h2 class="text-xl text-green-500">Регистрация прошла успешно!</h2>
       </div>
     </div>
   </div>
