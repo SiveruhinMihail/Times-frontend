@@ -4,7 +4,7 @@ export const useApi = () => {
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
 
-  const api = async (request: any, options: any = {}) => {
+  const api = async (request: string, options: any = {}) => {
     try {
       const headers = {
         ...options.headers,

@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 const $api = useApi();
 const config = useRuntimeConfig();
 
-const sub = async () => {
+const sub = async (): Promise<void> => {
   try {
     const response = await $api(
       config.public.apiBaseUrl + "auth/get_user?email=userrrrr@example.com",

@@ -1,20 +1,22 @@
-<script setup>
+<script setup lang="ts">
 const submitted = ref(false);
 const formErrors = ref({});
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 
-const submitHandler = async (data) => {
+const submitHandler = async (data?: { name: string; password: string }) => {
   try {
-    const response = await $fetch(config.public.apiBaseUrl + "auth/login", {
+    const response = await $fetch<{
+      data: { accessToken: string; refreshToken: string };
+      error?: any;
+    }>(config.public.apiBaseUrl + "auth/login", {
       method: "POST",
       body: data,
-    });
+    } as any);
 
     if (response.error) {
       formErrors.value = response.error;
     } else {
-      console.log(response);
       authStore.setTokens(
         response.data.accessToken,
         response.data.refreshToken
@@ -23,7 +25,7 @@ const submitHandler = async (data) => {
       formErrors.value = {};
       await navigateTo("/");
     }
-  } catch (error) {
+  } catch (error: any) {
     formErrors.value = {
       general:
         error.data?.detail ||
@@ -31,6 +33,10 @@ const submitHandler = async (data) => {
         "Произошла ошибка при авторизации",
     };
   }
+};
+const togglePasswordVisibility = (node: any) => {
+  node.props.suffixIcon = node.props.suffixIcon === "eye" ? "eyeClosed" : "eye";
+  node.props.type = node.props.type === "password" ? "text" : "password";
 };
 </script>
 
@@ -84,6 +90,8 @@ const submitHandler = async (data) => {
           help="Введите пароль"
           label-class="text-lg"
           input-class="text-lg py-2 px-4 w-full"
+          suffix-icon="eyeClosed"
+          @suffix-icon-click="togglePasswordVisibility"
         />
         <FormKit type="submit">Продолжить ></FormKit>
       </FormKit>

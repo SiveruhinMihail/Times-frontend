@@ -1,15 +1,18 @@
-<script setup>
+<script setup lang="ts">
 const submitted = ref(false);
 const formErrors = ref({});
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 
-const submitHandler = async (data) => {
+const submitHandler = async (data?: { name: string; password: string }) => {
   try {
-    const response = await $fetch(config.public.apiBaseUrl + "auth/register", {
+    const response = await $fetch<{
+      data: { accessToken: string; refreshToken: string };
+      error?: any;
+    }>(config.public.apiBaseUrl + "auth/register", {
       method: "POST",
       body: data,
-    });
+    } as any);
 
     if (response.error) {
       formErrors.value = response.error;
@@ -23,7 +26,7 @@ const submitHandler = async (data) => {
       formErrors.value = {};
       await navigateTo("/");
     }
-  } catch (error) {
+  } catch (error: any) {
     formErrors.value = {
       general:
         error.data?.detail ||
@@ -31,18 +34,21 @@ const submitHandler = async (data) => {
         "Произошла ошибка при авторизации",
     };
   }
-};  
-const togglePasswordVisibility = (node) => {
-  node.props.suffixIcon = node.props.suffixIcon === 'eye' ? 'eyeClosed' : 'eye';
-  node.props.type = node.props.type === 'password' ? 'text' : 'password';
 };
-
+const togglePasswordVisibility = (node: any) => {
+  node.props.suffixIcon = node.props.suffixIcon === "eye" ? "eyeClosed" : "eye";
+  node.props.type = node.props.type === "password" ? "text" : "password";
+};
 </script>
 
 <template>
   <div class="flex items-center justify-center h-screen w-screen">
     <div style="width: 50vw">
-      <img src="/favicon.ico" class="object-cover place-self-center" style="height: 2vw" />
+      <img
+        src="/favicon.ico"
+        class="object-cover place-self-center"
+        style="height: 2vw"
+      />
     </div>
     <div class="flex-grow ml-20">
       <FormKit
@@ -54,7 +60,9 @@ const togglePasswordVisibility = (node) => {
         :actions="false"
         incomplete-message="Введите данные"
       >
-        <h1 class="font-bold" style="font-size: 3.2vw; margin-bottom: 2vw">Регистрация!</h1>
+        <h1 class="font-bold" style="font-size: 3.2vw; margin-bottom: 2vw">
+          Регистрация!
+        </h1>
         <div class="mb-5">
           <FormKit
             type="text"
@@ -120,7 +128,9 @@ const togglePasswordVisibility = (node) => {
           <FormKit type="submit">Продолжить ></FormKit>
         </div>
       </FormKit>
-      <div v-if="formErrors.general" class="text-red-500 mb-4">{{ formErrors.general }}</div>
+      <div v-if="formErrors.general" class="text-red-500 mb-4">
+        {{ formErrors.general }}
+      </div>
       <NuxtLink :to="{ path: '/auth/login' }"
         ><div style="font-size: 1vw">Уже есть аккаунт</div></NuxtLink
       >
