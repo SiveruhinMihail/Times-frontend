@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   modules: ["@pinia/nuxt", "@formkit/nuxt", "@nuxtjs/tailwindcss"],
   devServer: {
     port: 8000,
-    host: "127.0.0.1",
+    host: "172.27.160.1",
   },
   formkit: {
     autoImport: true,
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_URL || "http://localhost:8000/",
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_URL,
     },
   },
 });

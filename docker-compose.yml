@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: nginx:1.24-alpine
+    ports:
+      - '80:80'
+      - '443:443'  # Добавляем HTTPS порт
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./logs:/var/log/nginx
+    depends_on:
+      nuxt:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - nuxt-network
+
+  nuxt:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3000
+    expose:
+      - '3000'
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - nuxt-network
+
+networks:
+  nuxt-network:
+    driver: bridge

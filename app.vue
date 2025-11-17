@@ -9,11 +9,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="app">
+  <div class="app" style="font-family: JetBrainsMonoNL">
     <NuxtPage />
   </div>
 </template>
 
 <style>
 @import url("~/assets/css/index.css");
+@font-face {
+  font-family: "JetBrainsMonoNL";
+  src: url("./public/fonts/JetBrainsMonoNL-Regular.ttf");
+}
 </style>

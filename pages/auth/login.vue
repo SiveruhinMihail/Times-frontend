@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const submitted = ref(false);
-const formErrors = ref({});
+const formErrors = ref<{ general?: string }>({});
 const config = useRuntimeConfig();
 const authStore = useAuthStore();
 

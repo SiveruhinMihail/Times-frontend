@@ -1,4 +1,4 @@
-import type { CustomFetchHeaders } from "~/types/fetch";
+import type { CustomFetchHeaders } from "~/types/domains/api";
 
 export const useApi = () => {
   const authStore = useAuthStore();

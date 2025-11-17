@@ -4,23 +4,29 @@ const config = useRuntimeConfig();
 
 const sub = async (): Promise<void> => {
   try {
-    const response = await $api(
-      config.public.apiBaseUrl + "auth/get_user?email=userrrrr@example.com",
-      {
-        method: "GET",
-      }
-    );
+    const response = await $api(config.public.apiBaseUrl + "auth/me", {
+      method: "GET",
+    });
     console.log(response);
   } catch (error) {
     console.error(error);
   }
 };
+const data = ref([{ name: "name" }, { name: "name1" }]);
 </script>
 
 <template>
   <div>
-    <NuxtLink to="/auth/login"><div>Вход</div></NuxtLink>
-    <NuxtLink to="/auth/register"><div>Регистрация</div></NuxtLink>
-    <div @click="sub">запрос на себя</div>
+    <div>
+      <FeaturesHeader />
+      <div class="margin_header">
+        <!--<FeaturesBanner style="margin-top: 3vw" :data="data"></FeaturesBanner>-->
+      </div>
+    </div>
   </div>
 </template>
+<style scoped>
+.margin_header {
+  padding-top: 5vw;
+}
+</style>
