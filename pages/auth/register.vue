@@ -20,7 +20,7 @@ const submitHandler = async (data?: { name: string; password: string }) => {
       console.log(response);
       authStore.setTokens(
         response.data.accessToken,
-        response.data.refreshToken
+        response.data.refreshToken,
       );
       submitted.value = true;
       formErrors.value = {};
@@ -52,13 +52,13 @@ const togglePasswordVisibility = (node: any) => {
     </div>
     <div class="flex-grow ml-20">
       <FormKit
-        type="form"
         id="registration-example"
+        type="form"
         :form-class="submitted ? 'hide' : 'show'"
         submit-label="Register"
-        @submit="submitHandler"
         :actions="false"
         incomplete-message="Введите данные"
+        @submit="submitHandler"
       >
         <h1 class="font-bold" style="font-size: 3.2vw; margin-bottom: 2vw">
           Регистрация!

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const { user, isAuthenticated, checkAuth, logout } = useAuth();
+const { user, isAuthenticated, checkAuth } = useAuth();
 
-let data1 = defineProps({
+const data1 = defineProps({
   scroll: Boolean,
   cleanmode: Boolean,
 });
@@ -57,7 +57,7 @@ onUnmounted(() => {
           </div>
         </router-link>
       </header>
-      <div class="inline-flex" style="gap: 2vw" v-if="isAuthenticated">
+      <div v-if="isAuthenticated" class="inline-flex" style="gap: 2vw">
         <div class="header-element">Избранное</div>
         <div class="header-element">Главная</div>
         <div class="header-element">Мои посты</div>
@@ -80,35 +80,35 @@ onUnmounted(() => {
           :class="{ EnterDropRight: isOpen, LeaveDropRight: !isOpen }"
         >
           <div
+            v-if="clean && Active"
             class="inline-flex items-center modal place-content-end select-none"
             style="padding-right: 1vw; margin-top: 1vw; width: 21vw"
-            v-if="clean && Active"
           >
             <div
               class="justify-center hover:bg-gray-200 rounded-full cursor-pointer"
               style="padding: 1.4vw"
-              @click="(isOpen = !isOpen), (Active = true)"
+              @click="((isOpen = !isOpen), (Active = true))"
             >
               <img src="/arrow1.svg" style="width: 1.2vw; height: 1.2vw" />
             </div>
           </div>
 
           <Dropdown
-            class="modal"
             v-if="Active"
+            :id="user.id"
+            class="modal"
             :username="user.username"
             :email="user.email"
             :img="user.avatar"
             :role="user.role"
-            :id="user.id"
           />
         </div>
-        <div class="inline-flex" v-if="isAuthenticated">
+        <div v-if="isAuthenticated" class="inline-flex">
           <div
+            v-if="clean"
             class="inline-flex DropDown items-center cursor-pointer select-none modal"
             style="padding: 1vw"
-            @click="(isOpen = !isOpen), (Active = true)"
-            v-if="clean"
+            @click="((isOpen = !isOpen), (Active = true))"
           >
             <img
               v-if="user.avatar"

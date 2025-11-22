@@ -29,7 +29,7 @@ export const useApi = () => {
       if (error?.response?.status === 401) {
         const errorMessage = error.response?._data?.data?.detail;
         const isTokenInvalid = ["Токен недействителен или просрочен"].includes(
-          errorMessage
+          errorMessage,
         );
 
         if (isTokenInvalid) {

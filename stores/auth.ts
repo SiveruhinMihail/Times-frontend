@@ -12,7 +12,7 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     initTokens() {
-      if (process.client) {
+      if (import.meta.client) {
         this.accessToken = localStorage.getItem("token") || null;
         this.refreshToken = localStorage.getItem("refresh_token") || null;
       }
@@ -20,21 +20,21 @@ export const useAuthStore = defineStore("auth", {
     setTokens(access: string, refresh: string) {
       this.accessToken = access;
       this.refreshToken = refresh;
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem("token", access);
         localStorage.setItem("refresh_token", refresh);
       }
     },
     setToken(access: string) {
       this.accessToken = access;
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.setItem("token", access);
       }
     },
     clearTokens() {
       this.accessToken = null;
       this.refreshToken = null;
-      if (process.client) {
+      if (import.meta.client) {
         localStorage.removeItem("token");
         localStorage.removeItem("refresh_token");
       }
@@ -53,7 +53,7 @@ export const useAuthStore = defineStore("auth", {
           {
             method: "POST",
             headers: { "jwt-refresh": this.refreshToken },
-          }
+          },
         );
         const access = response.data.access_token;
 

@@ -8,7 +8,9 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@formkit/i18n": "^1.6.9",
@@ -16,7 +18,10 @@
     "@formkit/nuxt": "^1.6.9",
     "@formkit/themes": "^1.6.9",
     "@formkit/vue": "^1.6.9",
+    "@nuxt/eslint": "^1.10.0",
     "@pinia/nuxt": "^0.11.2",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
     "formkit": "^1.6.9",
     "nuxt": "^4.0.1",
     "pinia": "^3.0.3",
@@ -24,11 +29,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@nuxt/eslint-config": "^1.10.0",
     "@nuxtjs/tailwindcss": "^6.14.0",
-    "eslint": "^9.38.0",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-nuxt": "^4.0.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2"
   }

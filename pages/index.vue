@@ -1,19 +1,4 @@
-<script setup lang="ts">
-const $api = useApi();
-const config = useRuntimeConfig();
-
-const sub = async (): Promise<void> => {
-  try {
-    const response = await $api("auth/me", {
-      method: "GET",
-    });
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
-};
-const data = ref([{ name: "name" }, { name: "name1" }]);
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div>

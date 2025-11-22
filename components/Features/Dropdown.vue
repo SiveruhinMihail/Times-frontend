@@ -1,17 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { useRouter } from "vue-router";
 const router = useRouter();
 const handleLogout = () => {
   localStorage.clear();
   router.push("/login");
 };
-let data = defineProps({
-  username: String,
-  email: String,
-  img: String,
-  role: String,
-  id: String,
-});
+
+interface DropDown_Props {
+  username?: string;
+  email?: string;
+  img?: string;
+  role?: string | number;
+  id?: string | number;
+}
+
+const data = defineProps<DropDown_Props>();
 </script>
 <template>
   <div
@@ -25,11 +28,11 @@ let data = defineProps({
     <div role="none" style="padding-top: 0.3vw">
       <a
         v-if="data.img"
+        id="menu-item-0"
         href="#"
         class="select-none flex justify-center cursor-default"
         role="menuitem"
         tabindex="-1"
-        id="menu-item-0"
         ><img
           :src="data.img"
           class="rounded-full shadow-lg"
@@ -38,11 +41,11 @@ let data = defineProps({
       </a>
       <a
         v-if="!data.img"
+        id="menu-item-0"
         href="#"
         class="select-none flex justify-center cursor-default"
         role="menuitem"
         tabindex="-1"
-        id="menu-item-0"
         ><img
           src="/avatar.jpg"
           class="rounded-full shadow-lg"
@@ -50,27 +53,28 @@ let data = defineProps({
         />
       </a>
       <a
+        id="menu-item-0"
         href="#"
         class="block select-none cursor-default name text-center"
         style="padding-top: 0.8vw; font-size: 1.5vw"
         role="menuitem"
         tabindex="-1"
-        id="menu-item-0"
         >{{ data.username }}</a
       >
       <a
+        id="menu-item-0"
         href="#"
         class="block text-gray-400 select-none cursor-default text-center"
         style="padding-bottom: 1.5vw; font-size: 1.1vw"
         role="menuitem"
         tabindex="-1"
-        id="menu-item-0"
         >{{ data.email }}</a
       >
       <hr class="DropDownHr" />
       <hr class="DropDownHr" />
       <router-link :to="{ path: '/profile', query: { id: data.id } }">
         <a
+          id="menu-item-0"
           href="#"
           class="block DropDownElement select-none"
           style="
@@ -81,7 +85,6 @@ let data = defineProps({
           "
           role="menuitem"
           tabindex="-1"
-          id="menu-item-0"
           ><div class="inline-flex items-center">
             <img
               src="/profile-icon.png"
@@ -93,6 +96,7 @@ let data = defineProps({
       <router-link :to="{ path: '/moder', query: { id: data.id } }">
         <a
           v-if="data.role === 'admin'"
+          id="menu-item-1"
           href="#"
           class="block DropDownElement"
           style="
@@ -103,7 +107,6 @@ let data = defineProps({
           "
           role="menuitem"
           tabindex="-1"
-          id="menu-item-1"
           ><div class="inline-flex items-center">
             <img
               src="/moder.png"
@@ -115,6 +118,7 @@ let data = defineProps({
       <router-link :to="{ path: '/register' }">
         <a
           v-if="data.role === 'admin'"
+          id="menu-item-1"
           href="#"
           class="block DropDownElement"
           style="
@@ -125,7 +129,6 @@ let data = defineProps({
           "
           role="menuitem"
           tabindex="-1"
-          id="menu-item-1"
           ><div class="inline-flex items-center">
             <img
               src="/plus.png"
@@ -136,6 +139,7 @@ let data = defineProps({
       >
       <router-link :to="{ path: '/my_routes', query: { id: data.id } }">
         <a
+          id="menu-item-1"
           href="#"
           class="block DropDownElement"
           style="
@@ -146,7 +150,6 @@ let data = defineProps({
           "
           role="menuitem"
           tabindex="-1"
-          id="menu-item-1"
           ><div class="inline-flex items-center">
             <img
               src="/file.png"
@@ -156,7 +159,7 @@ let data = defineProps({
         ></router-link
       >
       <button
-        @click="handleLogout"
+        id="menu-item-3"
         type="submit"
         style="
           padding-left: 1.14vw;
@@ -167,7 +170,7 @@ let data = defineProps({
         class="block w-full text-left exit DropDownElement"
         role="menuitem"
         tabindex="-1"
-        id="menu-item-3"
+        @click="handleLogout"
       >
         <div class="inline-flex items-center">
           <img

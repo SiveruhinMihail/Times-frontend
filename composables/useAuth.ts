@@ -2,7 +2,7 @@ export const useAuth = () => {
   const user = ref<any>(null);
   const isAuthenticated = ref(false);
   const $api = useApi();
-  const config = useRuntimeConfig();
+  useRuntimeConfig();
   const router = useRouter();
 
   const checkAuth = async (): Promise<void> => {

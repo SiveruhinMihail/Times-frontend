@@ -1,7 +1,12 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
-  modules: ["@pinia/nuxt", "@formkit/nuxt", "@nuxtjs/tailwindcss"],
+  modules: [
+    "@pinia/nuxt",
+    "@formkit/nuxt",
+    "@nuxtjs/tailwindcss",
+    "@nuxt/eslint",
+  ],
   formkit: {
     autoImport: true,
     configFile: "./formkit.config.ts",
