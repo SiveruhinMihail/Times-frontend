@@ -4,7 +4,7 @@ const config = useRuntimeConfig();
 
 const sub = async (): Promise<void> => {
   try {
-    const response = await $api(config.public.apiBaseUrl + "auth/me", {
+    const response = await $api("auth/me", {
       method: "GET",
     });
     console.log(response);

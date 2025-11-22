@@ -4,11 +4,11 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev --host 172.27.160.1 --port 8000",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "npm run dev"
+    "start": "nuxt start"
   },
   "dependencies": {
     "@formkit/i18n": "^1.6.9",

@@ -9,7 +9,7 @@ const submitHandler = async (data?: { name: string; password: string }) => {
     const response = await $fetch<{
       data: { accessToken: string; refreshToken: string };
       error?: any;
-    }>(config.public.apiBaseUrl + "auth/login", {
+    }>(config.public.apiUrl + "auth/login", {
       method: "POST",
       body: data,
     } as any);

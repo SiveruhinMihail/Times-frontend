@@ -4,8 +4,15 @@ export const useApi = () => {
   const authStore = useAuthStore();
   const config = useRuntimeConfig();
 
+  console.log("API Config:", config.public);
+
   const api = async (request: string, options: any = {}) => {
     try {
+      console.log("Fetch debug:", {
+        request,
+        baseURL: config.public.apiUrl,
+        fullURL: config.public.apiUrl + request,
+      });
       const headers = {
         ...options.headers,
         ...(authStore.accessToken && {
@@ -15,8 +22,8 @@ export const useApi = () => {
 
       return await $fetch(request, {
         ...options,
-        baseURL: config.public.apiBaseUrl,
         headers,
+        baseURL: config.public.apiUrl,
       });
     } catch (error: any) {
       if (error?.response?.status === 401) {
@@ -36,7 +43,7 @@ export const useApi = () => {
 
             return await $fetch(request, {
               ...options,
-              baseURL: config.public.apiBaseUrl,
+              baseURL: config.public.apiUrl,
               headers,
             });
           } catch (refreshError) {

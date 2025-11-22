@@ -9,7 +9,7 @@ const submitHandler = async (data?: { name: string; password: string }) => {
     const response = await $fetch<{
       data: { accessToken: string; refreshToken: string };
       error?: any;
-    }>(config.public.apiBaseUrl + "auth/register", {
+    }>(config.public.apiUrl + "auth/register", {
       method: "POST",
       body: data,
     } as any);
@@ -128,8 +128,8 @@ const togglePasswordVisibility = (node: any) => {
           <FormKit type="submit">Продолжить ></FormKit>
         </div>
       </FormKit>
-      <div v-if="formErrors.general" class="text-red-500 mb-4">
-        {{ formErrors.general }}
+      <div v-if="formErrors" class="text-red-500 mb-4">
+        {{ formErrors }}
       </div>
       <NuxtLink :to="{ path: '/auth/login' }"
         ><div style="font-size: 1vw">Уже есть аккаунт</div></NuxtLink

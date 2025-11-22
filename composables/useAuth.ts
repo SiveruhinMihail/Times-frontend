@@ -7,7 +7,7 @@ export const useAuth = () => {
 
   const checkAuth = async (): Promise<void> => {
     try {
-      const data = await $api(config.public.apiBaseUrl + "auth/me", {
+      const data = await $api("auth/me", {
         method: "GET",
       });
 

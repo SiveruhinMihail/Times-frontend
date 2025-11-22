@@ -12,7 +12,7 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     initTokens() {
-      if (import.meta.client) {
+      if (process.client) {
         this.accessToken = localStorage.getItem("token") || null;
         this.refreshToken = localStorage.getItem("refresh_token") || null;
       }
