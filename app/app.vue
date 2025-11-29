@@ -15,9 +15,9 @@ onMounted(() => {
 </template>
 
 <style>
-@import url("~/assets/css/index.css");
+@import url("./assets/css/index.css");
 @font-face {
   font-family: "JetBrainsMonoNL";
-  src: url("./public/fonts/JetBrainsMonoNL-Regular.ttf");
+  src: url("/fonts/JetBrainsMonoNL-Regular.ttf");
 }
 </style>
