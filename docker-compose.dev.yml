@@ -1,0 +1,21 @@
+# docker-compose.dev.yml
+services:
+  nuxt-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: nuxt-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PORT=3000
+      - CHOKIDAR_USEPOLLING=true
+      - NUXT_PUBLIC_API_URL=http://localhost:3001/api/
+      - NUXT_PUBLIC_FILES_URL=http://localhost:8080
+    working_dir: /app
+    command: npm run dev
+    stdin_open: true
+    tty: true

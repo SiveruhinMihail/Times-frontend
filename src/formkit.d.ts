@@ -1,1 +1,0 @@
-declare module '@formkit/themes/dist/genesis.css';

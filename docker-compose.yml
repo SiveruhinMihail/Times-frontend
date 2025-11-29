@@ -1,0 +1,16 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: nuxt-prod
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+      - PORT=3000
+      - NUXT_PUBLIC_API_URL=http://localhost:3001/api/
+      - NUXT_PUBLIC_FILES_URL=http://localhost:8080
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
