@@ -34,6 +34,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@nuxt/types": "^2.18.1",
     "@nuxtjs/tailwindcss": "^6.14.0",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2"
